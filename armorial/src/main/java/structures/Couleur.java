@@ -20,7 +20,7 @@ public class Couleur {
 		// Normalisation de l'expression
 		String n_exp = exp.toLowerCase();
 		n_exp = Normalizer.normalize(n_exp, Normalizer.Form.NFD);
-		n_exp = n_exp.replaceAll("[^\\p{ASCII}]", "");
+		n_exp = n_exp.replaceAll("[^\\p{ASCII}]", ""); // pas d'accents
 		
 		switch(n_exp) {
 		case "azur":
@@ -57,7 +57,7 @@ public class Couleur {
 			// Couleur/motifs, à définir
 			break;
 		default:
-			couleur = new Color(255, 255, 255);
+			couleur = null;
 			break;
 		}
 	}
