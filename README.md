@@ -18,3 +18,5 @@ https://fr.wikipedia.org/wiki/Portail:H%C3%A9raldique
 https://fr.wikipedia.org/wiki/Blasonnement
 
 https://fr.wikipedia.org/wiki/Projet:Blasons/Cr%C3%A9ation
+
+https://fr.wiktionary.org/wiki/Th%C3%A9saurus:h%C3%A9raldique/fran%C3%A7ais
