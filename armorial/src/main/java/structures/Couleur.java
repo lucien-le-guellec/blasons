@@ -19,6 +19,14 @@ public class Couleur {
 	public void SetCouleur(String exp) {
 		// Normalisation de l'expression
 		String n_exp = exp.toLowerCase();
+		
+		// Si "d'" on retire
+		if(n_exp.length() > 2) {
+			if(n_exp.substring(0, 2).equalsIgnoreCase("d'")) {
+				n_exp = n_exp.substring(2);
+			}
+		}
+		
 		n_exp = Normalizer.normalize(n_exp, Normalizer.Form.NFD);
 		n_exp = n_exp.replaceAll("[^\\p{ASCII}]", ""); // pas d'accents
 		
@@ -61,10 +69,17 @@ public class Couleur {
 			break;
 		}
 	}
-	
 
 	public Color getCouleur() {
 		return this.couleur;
+	}
+	
+	public String toString() {
+		if (this.couleur != null) {
+			return "(" + this.couleur.getRed() + "," + this.couleur.getGreen() + "," + this.couleur.getBlue() + ")";
+		}
+		
+		return null;
 	}
 	
 }

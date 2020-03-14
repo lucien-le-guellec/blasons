@@ -18,7 +18,7 @@ public class Partition {
 		String n_exp = exp.toLowerCase();
 		n_exp = Normalizer.normalize(n_exp, Normalizer.Form.NFD);
 		n_exp = n_exp.replaceAll("[^\\p{ASCII}]", ""); // pas d'accents
-		
+				
 		switch(n_exp) {
 		case "parti":
 			this.partition = Partitions.PARTI;

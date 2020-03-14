@@ -1,5 +1,10 @@
 package modèle;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import structures.Couleur;
+
 /**
  * 	Classe contenant les informations et éléments d'un champ (arrière-plan) 
  * 
@@ -14,4 +19,24 @@ package modèle;
  */
 public class Champ {
 
+	private Couleur couleur;
+	
+	private List<Charge> charges;
+	
+	public Champ() {
+		this.charges = new ArrayList<Charge>();
+	}
+	
+	public void SetCouleur(Couleur nouvCoul) {
+		this.couleur = nouvCoul;
+	}
+	
+	public Couleur GetCouleur() {
+		return this.couleur;
+	}
+	
+	public List<Charge> GetCharges() {
+		return this.charges;
+	}
+	
 }

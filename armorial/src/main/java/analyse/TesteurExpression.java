@@ -8,6 +8,8 @@ import structures.Partition;
  * 	des expressions font références à des structures connues.
  */
 public class TesteurExpression {
+	
+	public static int nouvPosition = 0;
 
 	/**
 	 * Test de couleur, 
@@ -20,19 +22,26 @@ public class TesteurExpression {
 		exp = exp.clone();
 		
 		// Si "de" on avance
-		if(exp[position].toLowerCase() == "de") {
+		if(exp[position].equalsIgnoreCase("de")) {
 			position += 1;
 		}
 		
 		// Si "d'" on retire
-		if(exp[position].toLowerCase().substring(1, 3) == "d'") {
-			exp[position] = exp[position].substring(2);
+		if(exp[position].length() > 2) {
+			if(exp[position].substring(0, 2).equalsIgnoreCase("d'")) {
+				exp[position] = exp[position].substring(2);
+			}
 		}
 		
 		// Test de couleur
 		Couleur test = new Couleur(exp[position]);
 		
-		return test != null;
+		if (test.getCouleur() != null) {
+			TesteurExpression.nouvPosition = position + 1;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -52,7 +61,12 @@ public class TesteurExpression {
 		// Test de partition
 		Partition test = new Partition(exp[position]);
 		
-		return test.GetPartition() != null;
+		if (test.GetPartition() != null) {
+			TesteurExpression.nouvPosition = position + 1;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -84,6 +98,35 @@ public class TesteurExpression {
 				
 		// Si l'élément suivant est une couleur, alors c'est une partition de champ
 		return TesteurExpression.EstUneCouleur(exp, position+1);
+	}
+	
+	/**
+	 * Test de "plein"
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp "plein" est trouvée 
+	 */
+	public static boolean EstPlein(String[] exp, int position) {
+		exp = exp.clone();
+		
+		if (exp[position].equalsIgnoreCase("plein")) {
+			TesteurExpression.nouvPosition = position + 1;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Test de charge
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp est une charge
+	 */
+	public static boolean EstUneCharge(String[] exp, int position) {
+		exp = exp.clone();
+		
+		return false;
 	}
 	
 }
