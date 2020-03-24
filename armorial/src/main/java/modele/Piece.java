@@ -1,4 +1,4 @@
-package modèle;
+package modele;
 
 /**
  * 	Classe représentant une pièce, charge secondaire dans un blason, et ses informations

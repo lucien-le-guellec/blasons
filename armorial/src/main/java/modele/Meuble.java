@@ -1,4 +1,4 @@
-package modèle;
+package modele;
 
 /**
  * 	Classe représentant un meuble, la charge principale du blason, et ses informations

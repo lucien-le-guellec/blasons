@@ -1,4 +1,4 @@
-package modèle;
+package modele;
 
 /**
  * 	Classe représentant un quartier, une partie d'un blason

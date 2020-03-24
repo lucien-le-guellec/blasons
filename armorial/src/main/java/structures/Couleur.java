@@ -29,6 +29,7 @@ public class Couleur {
 		
 		n_exp = Normalizer.normalize(n_exp, Normalizer.Form.NFD);
 		n_exp = n_exp.replaceAll("[^\\p{ASCII}]", ""); // pas d'accents
+		n_exp = n_exp.replaceAll(",", "");
 		
 		switch(n_exp) {
 		case "azur":

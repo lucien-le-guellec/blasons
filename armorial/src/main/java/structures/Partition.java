@@ -2,7 +2,7 @@ package structures;
 
 import java.text.Normalizer;
 
-import Ressources.Partitions;
+import ressources.Partitions;
 
 public class Partition {
 

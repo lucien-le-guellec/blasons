@@ -9,7 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import analyse.AnalyseurSyntaxique;
-import modèle.Blason;
+import modele.Blason;
+import ressources.Partitions;
 
 public class TestAnalyse {
 
@@ -27,7 +28,7 @@ public class TestAnalyse {
 		a.Analyser();
 		Blason b = a.GetBlason();
 		assertEquals(b.GetQuartiers().size(), 1); // 1 quartier
-		Color c = b.GetQuartierCourant().GetChamp().GetCouleur().getCouleur();
+		Color c = b.GetQuartierCourant().GetChamp().GetCouleurs().get(0).getCouleur();
 		assertEquals(c.getRed(), 255); // Couleur or
 		assertEquals(c.getGreen(), 241);
 		assertEquals(c.getBlue(), 0);
@@ -36,7 +37,7 @@ public class TestAnalyse {
 		a.Analyser();
 		b = a.GetBlason();
 		assertEquals(b.GetQuartiers().size(), 1); // 1 quartier
-		c = b.GetQuartierCourant().GetChamp().GetCouleur().getCouleur();
+		c = b.GetQuartierCourant().GetChamp().GetCouleurs().get(0).getCouleur();
 		assertEquals(c.getRed(), 255); // Couleur gueules
 		assertEquals(c.getGreen(), 0);
 		assertEquals(c.getBlue(), 0);
@@ -44,6 +45,18 @@ public class TestAnalyse {
 		
 		a = new AnalyseurSyntaxique("Écartelé d'or et de gueules.");
 		a.Analyser();
+		b = a.GetBlason();
+		assertEquals(b.GetQuartiers().size(), 1); // 1 quartier
+		assertEquals(b.GetQuartierCourant().GetChamp().GetPartition().GetPartition(), Partitions.ECARTELE); // écartelé
+		assertEquals(b.GetQuartierCourant().GetChamp().GetCouleurs().size(), 2); // 2 couleurs
+		c = b.GetQuartierCourant().GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 255); // Couleur 1: or
+		assertEquals(c.getGreen(), 241);
+		assertEquals(c.getBlue(), 0);
+		c = b.GetQuartierCourant().GetChamp().GetCouleurs().get(1).getCouleur();
+		assertEquals(c.getRed(), 255); // Couleur 2: gueules
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 0);
 	}
 
 }

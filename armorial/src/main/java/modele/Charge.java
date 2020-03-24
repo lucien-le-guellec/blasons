@@ -1,4 +1,4 @@
-package modèle;
+package modele;
 
 /**
  * 	Classe représentant une charge, un élément décoratif et ses informations

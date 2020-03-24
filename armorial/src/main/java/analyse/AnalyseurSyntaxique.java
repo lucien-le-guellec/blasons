@@ -1,7 +1,12 @@
 package analyse;
 
-import modèle.Blason;
+import java.util.ArrayList;
+import java.util.List;
+
+import modele.Blason;
+import ressources.Partitions;
 import structures.Couleur;
+import structures.Partition;
 
 /**
  * 	Permet l'analyse syntaxique d'une phrase de blasonnement, et produit 
@@ -67,11 +72,15 @@ public class AnalyseurSyntaxique {
 				this.blason.AddQuartier();
 			}
 			else {
-				// champ partitioné (5)
+				// champ partitioné (5->14)
 				if(TesteurExpression.EstUnePartitionChamp(this.expression, this.position)) {
-					this.etat = 5;
+					this.etat = 14;
 					System.out.println("Arme simple, champ partitioné");
+					
+					// Ajout du champ partitionné
 					this.blason.AddQuartier();
+					Partition part = new Partition(this.expression[this.position]);
+					this.blason.GetQuartierCourant().GetChamp().SetPartition(part);
 				}
 				// arme composée (2)
 				else if(TesteurExpression.EstUnePartitionArme(this.expression, this.position)) {
@@ -84,8 +93,12 @@ public class AnalyseurSyntaxique {
 			System.out.println("Etat 4");
 			if(TesteurExpression.EstUneCouleur(this.expression, this.position)) {
 				this.position = TesteurExpression.nouvPosition;
-				Couleur couleur = new Couleur(this.expression[this.position-1]);
-				this.blason.GetQuartierCourant().GetChamp().SetCouleur(couleur);
+				
+				Couleur c1 = new Couleur(this.expression[this.position-1]);
+				List<Couleur> couleurs = new ArrayList<Couleur>();
+				couleurs.add(c1);
+				this.blason.GetQuartierCourant().GetChamp().SetCouleurs(couleurs);
+				
 				// Champ plein 13
 				if(TesteurExpression.EstPlein(this.expression, this.position)) {
 					System.out.println("champ plein");
@@ -93,6 +106,61 @@ public class AnalyseurSyntaxique {
 				else if (TesteurExpression.EstUneCharge(this.expression, this.position)) {
 					System.out.println("champ chargé");
 				}
+			}
+			else {
+				// ERREUR de syntaxe
+				System.out.println("Erreur de syntaxe, élément attendu : COULEUR");
+			}
+			this.etat = 99;
+			break;
+		case 14: // Champ partitionné, état possible: 15
+			System.out.println("Etat 14");
+						
+			// Une ou deux couleurs attendues
+			if(TesteurExpression.EstUneCouleur(this.expression, this.position)) {
+				this.position = TesteurExpression.nouvPosition;
+				
+				List<Couleur> couleurs = new ArrayList<Couleur>();
+				Couleur c1 = new Couleur(this.expression[this.position-1]);
+				couleurs.add(c1);
+								
+				// Deuxième couleur ?
+				if(TesteurExpression.EstUneCouleur(this.expression, this.position)) {
+					this.position = TesteurExpression.nouvPosition;
+					
+					Couleur c2 = new Couleur(this.expression[this.position-1]);
+					couleurs.add(c2);
+				}
+				
+				this.blason.GetQuartierCourant().GetChamp().SetCouleurs(couleurs);
+				this.etat = 15;
+			}
+			else {
+				// ERREUR de syntaxe
+				System.out.println("Erreur de syntaxe, élément attendu : COULEUR");
+			}
+			break;
+		case 15: // Sortie de arme simple, etat possible: 3,32,99
+			// Si le tout est coloré
+			if(TesteurExpression.EstLeToutCouleur(this.expression, this.position)) {
+				this.position = TesteurExpression.nouvPosition;
+				this.etat = 32;
+			}
+			
+			// Si le tout est chargé
+			// TODO : if(TesteurExpression.EstLeToutCharge(this.expression, this.position)) 
+			
+			break;
+		case 32: // Sortie de le tout coloré, état possible: 99
+			if(TesteurExpression.EstUneCouleur(this.expression, this.position)) {
+				this.position = TesteurExpression.nouvPosition;
+				
+				Couleur c1 = new Couleur(this.expression[this.position-1]);
+				// TODO : toutes les charges de la couleur identifiée
+				
+			}
+			else if(TesteurExpression.EstDuMeme(this.expression, this.position)) {
+				// TODO : interprétation à voir ??
 			}
 			else {
 				// ERREUR de syntaxe

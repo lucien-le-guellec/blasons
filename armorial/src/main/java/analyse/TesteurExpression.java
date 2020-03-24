@@ -21,6 +21,11 @@ public class TesteurExpression {
 		
 		exp = exp.clone();
 		
+		// Si "et" on avance
+		if(exp[position].equalsIgnoreCase("et")) {
+			position += 1;
+		}
+		
 		// Si "de" on avance
 		if(exp[position].equalsIgnoreCase("de")) {
 			position += 1;
@@ -39,6 +44,30 @@ public class TesteurExpression {
 		if (test.getCouleur() != null) {
 			TesteurExpression.nouvPosition = position + 1;
 			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Test si l'expression courante est "du même"
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp est "du même"
+	 */
+	public static boolean EstDuMeme(String[] exp, int position) {
+		
+		exp = exp.clone();
+		
+		// Si "du" on avance
+		if(exp[position].equalsIgnoreCase("du")) {
+			position += 1;
+			// Si "même" on avance
+			if(exp[position].equalsIgnoreCase("même")) {
+				position += 1;
+				TesteurExpression.nouvPosition = position + 1;
+				return true;
+			}
 		}
 		
 		return false;
@@ -95,9 +124,16 @@ public class TesteurExpression {
 		if(!TesteurExpression.EstUnePartition(exp, position)) {
 			return false;
 		}
+		
+		int pos = TesteurExpression.nouvPosition;
 				
 		// Si l'élément suivant est une couleur, alors c'est une partition de champ
-		return TesteurExpression.EstUneCouleur(exp, position+1);
+		boolean coul = TesteurExpression.EstUneCouleur(exp, position+1);
+		
+		// On réinitialise la position actuelle à l'élément de partition analysé
+		TesteurExpression.nouvPosition = pos;
+		
+		return coul;
 	}
 	
 	/**
@@ -125,6 +161,30 @@ public class TesteurExpression {
 	 */
 	public static boolean EstUneCharge(String[] exp, int position) {
 		exp = exp.clone();
+		
+		return false;
+	}
+	
+	/**
+	 * Test si l'expression courante est "le tout" coloré
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp est "le tout" coloré
+	 */
+	public static boolean EstLeToutCouleur(String[] exp, int position) {
+		
+		exp = exp.clone();
+		
+		// Si "le" on avance
+		if(exp[position].equalsIgnoreCase("le")) {
+			position += 1;
+			// Si "tout" on avance
+			if(exp[position].equalsIgnoreCase("tout")) {
+				position += 1;
+				TesteurExpression.nouvPosition = position + 1;
+				return true;
+			}
+		}
 		
 		return false;
 	}
