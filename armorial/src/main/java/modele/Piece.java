@@ -8,4 +8,8 @@ package modele;
  */
 public class Piece extends Charge {
 
+	public Piece(String expression) {
+		super(expression);
+	}
+
 }

@@ -20,6 +20,15 @@ public class Couleur {
 		// Normalisation de l'expression
 		String n_exp = exp.toLowerCase();
 		
+		n_exp = n_exp.trim();
+		
+		// On retire la ponctuation de fin
+		if(n_exp.charAt(n_exp.length() - 1) == '.' ||
+			n_exp.charAt(n_exp.length() - 1) == ',' ||
+			n_exp.charAt(n_exp.length() - 1) == ';') {
+			n_exp = n_exp.substring(0, n_exp.length() - 1);
+		}
+		
 		// Si "d'" on retire
 		if(n_exp.length() > 2) {
 			if(n_exp.substring(0, 2).equalsIgnoreCase("d'")) {

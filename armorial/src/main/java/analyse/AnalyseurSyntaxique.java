@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Blason;
+import modele.Charge;
 import ressources.Partitions;
 import structures.Couleur;
 import structures.Partition;
@@ -26,10 +27,6 @@ public class AnalyseurSyntaxique {
 	public AnalyseurSyntaxique(String phrase) {
 		this.phrase = phrase;
 		this.expression = phrase.split(" ");
-		// On retire le point de fin de phrase si présent
-		if(this.expression[this.expression.length-1].contains(".")) {
-			this.expression[this.expression.length-1] = this.expression[this.expression.length-1].substring(0, this.expression[this.expression.length-1].length() - 1);
-		}
 		this.position = 0;
 		this.etat = 0;
 		this.blason = new Blason(phrase);
@@ -104,7 +101,18 @@ public class AnalyseurSyntaxique {
 					System.out.println("champ plein");
 				}
 				else if (TesteurExpression.EstUneCharge(this.expression, this.position)) {
-					System.out.println("champ chargé");
+					
+					// Récupération de l'expression de la charge
+					String chargeStr = "";
+					while (this.position < TesteurExpression.nouvPosition) {
+						chargeStr += this.expression[this.position] + " ";
+						this.position++;
+					}
+					
+					Charge charge = new Charge(chargeStr);
+					this.blason.GetQuartierCourant().GetChamp().GetCharges().add(charge);
+					
+					System.out.println("champ chargé : " + charge.GetRepresentation());
 				}
 			}
 			else {
@@ -141,6 +149,7 @@ public class AnalyseurSyntaxique {
 			}
 			break;
 		case 15: // Sortie de arme simple, etat possible: 3,32,99
+			System.out.println("Etat 15");
 			// Si le tout est coloré
 			if(TesteurExpression.EstLeToutCouleur(this.expression, this.position)) {
 				this.position = TesteurExpression.nouvPosition;
@@ -150,8 +159,10 @@ public class AnalyseurSyntaxique {
 			// Si le tout est chargé
 			// TODO : if(TesteurExpression.EstLeToutCharge(this.expression, this.position)) 
 			
+			this.etat = 99;
 			break;
 		case 32: // Sortie de le tout coloré, état possible: 99
+			System.out.println("Etat 32");
 			if(TesteurExpression.EstUneCouleur(this.expression, this.position)) {
 				this.position = TesteurExpression.nouvPosition;
 				

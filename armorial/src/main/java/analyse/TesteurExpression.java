@@ -157,10 +157,121 @@ public class TesteurExpression {
 	 * Test de charge
 	 * @param exp, expression complète
 	 * @param position, position de l'élément à analyser dans l'expression
-	 * @return true l'exp est une charge
+	 * @return true l'exp est une charge, défini la position à la fin de la charge
 	 */
 	public static boolean EstUneCharge(String[] exp, int position) {
 		exp = exp.clone();
+		
+		int origine = position;
+		
+		if(TesteurExpression.EstUnePiece(exp, position) ||
+			TesteurExpression.EstUnMeuble(exp, position)) {
+			position = TesteurExpression.nouvPosition;
+			
+			// Atteint une ',' ';' '.' ou la fin
+			while(position < exp.length) {
+				if (exp[position].charAt(exp[position].length()-1) == ';' ||
+					exp[position].charAt(exp[position].length()-1) == '.') {
+					TesteurExpression.nouvPosition = position + 1;
+					return true;
+				}
+				else if(exp[position].charAt(exp[position].length()-1) == ',') {
+					position++;
+					if(exp[position].equalsIgnoreCase("accompagné") ||
+						exp[position].equalsIgnoreCase("accompagnés") ||
+						exp[position].equalsIgnoreCase("accompagnée") ||
+						exp[position].equalsIgnoreCase("accompagnées") ||
+						exp[position].equalsIgnoreCase("et")) {
+						TesteurExpression.nouvPosition = position;
+						return true;
+					}
+				}
+				
+				position++;
+			}
+			TesteurExpression.nouvPosition = position;
+			return true;
+		}
+		
+		// On ne trouve pas l'expression, on se replace au début
+		TesteurExpression.nouvPosition = origine;
+		
+		return false;
+	}
+	
+	/**
+	 * Test de piece
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp est une piece, la position est définie après l'article
+	 */
+	public static boolean EstUnePiece(String[] exp, int position) {
+		exp = exp.clone();
+		
+		// Doit commencer par 'au', 'aux', 'à la' ou 'à l''
+		if (exp[position].equalsIgnoreCase("au")) {
+			position++;
+			TesteurExpression.nouvPosition = position;
+			return true;
+		}
+		else if (exp[position].equalsIgnoreCase("aux")) {
+			position++;
+			if (exp[position].equalsIgnoreCase("deux") || 
+				exp[position].equalsIgnoreCase("trois") ||
+				exp[position].equalsIgnoreCase("quatre")) {
+				TesteurExpression.nouvPosition = position;
+				return true;
+			}
+		}
+		else if (exp[position].equalsIgnoreCase("à") || exp[position].equalsIgnoreCase("a")) {
+			position++;
+			if (exp[position].equalsIgnoreCase("la") ||
+				exp[position].substring(0, 2).equalsIgnoreCase("l'")) {
+				TesteurExpression.nouvPosition = position;
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Test de meuble
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp est un meuble, la position est définie après l'article
+	 */
+	public static boolean EstUnMeuble(String[] exp, int position) {
+		exp = exp.clone();
+		
+		// Doit commencer par 'à/de/d' un/une/deux/trois...'
+		if (exp[position].equalsIgnoreCase("à") || 
+			exp[position].equalsIgnoreCase("a") ||
+			exp[position].equalsIgnoreCase("de")) {
+			position++;
+			if (exp[position].equalsIgnoreCase("un") ||
+				exp[position].equalsIgnoreCase("une") ||
+				exp[position].equalsIgnoreCase("deux") ||
+				exp[position].equalsIgnoreCase("trois") ||
+				exp[position].equalsIgnoreCase("quatre") ||
+				exp[position].equalsIgnoreCase("cinq") ||
+				exp[position].equalsIgnoreCase("six") ||
+				exp[position].equalsIgnoreCase("sept") ||
+				exp[position].equalsIgnoreCase("huit") ||
+				exp[position].equalsIgnoreCase("neuf") ||
+				exp[position].equalsIgnoreCase("dix") ) {
+				TesteurExpression.nouvPosition = position;
+				return true;
+			}
+		}
+		else if (exp[position].substring(0, 2).equalsIgnoreCase("d'")) {
+			position++;
+			if (exp[position].equalsIgnoreCase("un") ||
+				exp[position].equalsIgnoreCase("une")) {
+				TesteurExpression.nouvPosition = position;
+				return true;
+			}
+		}
 		
 		return false;
 	}
