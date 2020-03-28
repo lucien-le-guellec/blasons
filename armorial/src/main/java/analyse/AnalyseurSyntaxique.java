@@ -42,8 +42,8 @@ public class AnalyseurSyntaxique {
 		
 		// On analyse tant qu'il reste des expressions à analyser
 		while(this.position < this.expression.length) {
-			this.position = TesteurExpression.nouvPosition;
 			this.AnalyserSuivant();
+			this.position = TesteurExpression.nouvPosition;
 		}
 		
 		System.out.println("");
@@ -88,6 +88,7 @@ public class AnalyseurSyntaxique {
 			break;
 		case 4: // Champ simple, état possible: 12, 13
 			System.out.println("Etat 4");
+			System.out.println(this.expression[this.position]);
 			if(TesteurExpression.EstUneCouleur(this.expression, this.position)) {
 				this.position = TesteurExpression.nouvPosition;
 				
@@ -99,6 +100,10 @@ public class AnalyseurSyntaxique {
 				// Champ plein 13
 				if(TesteurExpression.EstPlein(this.expression, this.position)) {
 					System.out.println("champ plein");
+					// On passe à l'élément suivant
+					TesteurExpression.nouvPosition++;
+					// TODO : Le tout chargé/coloré ?
+					break;
 				}
 				else if (TesteurExpression.EstUneCharge(this.expression, this.position)) {
 					
@@ -115,11 +120,28 @@ public class AnalyseurSyntaxique {
 					System.out.println("champ chargé : " + charge.GetRepresentation());
 				}
 			}
+			// Accompagné d'une charge
+			else if(TesteurExpression.EstAccompagne(this.expression, this.position)) {
+				this.position = TesteurExpression.nouvPosition;
+				if (TesteurExpression.EstUneCharge(this.expression, this.position)) {
+					// Récupération de l'expression de la charge
+					String chargeStr = "";
+					while (this.position < TesteurExpression.nouvPosition) {
+						chargeStr += this.expression[this.position] + " ";
+						this.position++;
+					}
+					
+					Charge charge = new Charge(chargeStr);
+					this.blason.GetQuartierCourant().GetChamp().GetCharges().add(charge);
+					
+					System.out.println("accompagné de : " + charge.GetRepresentation());
+				}
+			}
 			else {
 				// ERREUR de syntaxe
-				System.out.println("Erreur de syntaxe, élément attendu : COULEUR");
+				System.out.println("Erreur de syntaxe.");
+				this.etat = 99;
 			}
-			this.etat = 99;
 			break;
 		case 14: // Champ partitionné, état possible: 15
 			System.out.println("Etat 14");
@@ -180,7 +202,7 @@ public class AnalyseurSyntaxique {
 			this.etat = 99;
 			break;
 		case 99:
-			this.position = this.expression.length;
+			TesteurExpression.nouvPosition = this.expression.length;
 			break;
 		default:
 			this.etat = 99;

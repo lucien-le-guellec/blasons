@@ -36,7 +36,8 @@ public class Charge {
 			premier.equalsIgnoreCase("aux") ||
 			premier.equalsIgnoreCase("la") ||
 			premier.equalsIgnoreCase("le") ||
-			premier.equalsIgnoreCase("des")) {
+			premier.equalsIgnoreCase("des") ||
+			premier.equalsIgnoreCase("de")) {
 			exp = exp.substring(premier.length()+1, exp.length());
 			premier = exp.split(" ")[0];
 		}

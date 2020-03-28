@@ -206,8 +206,9 @@ public class TestAnalyse {
 		assertEquals(c.getGreen(), 0);
 		assertEquals(c.getBlue(), 255);
 		List<Charge> cs = b.GetQuartierCourant().GetChamp().GetCharges();
-		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.size(), 2); // 2 charges
 		assertEquals(cs.get(0).GetRepresentation(), "chevron d'argent");
+		assertEquals(cs.get(1).GetRepresentation(), "trois roses du même");
 	}
 
 }

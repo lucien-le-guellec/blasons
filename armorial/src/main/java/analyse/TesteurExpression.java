@@ -145,7 +145,10 @@ public class TesteurExpression {
 	public static boolean EstPlein(String[] exp, int position) {
 		exp = exp.clone();
 		
-		if (exp[position].equalsIgnoreCase("plein")) {
+		
+		
+		if (exp[position].equalsIgnoreCase("plein") ||
+			exp[position].equalsIgnoreCase("plein.")) {
 			TesteurExpression.nouvPosition = position + 1;
 			return true;
 		}
@@ -300,4 +303,27 @@ public class TesteurExpression {
 		return false;
 	}
 	
+	/**
+	 * Test si l'expression courante est une expression d'accompagnement
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true l'exp est un accompagnement
+	 */
+	public static boolean EstAccompagne(String[] exp, int position) {
+		exp = exp.clone();
+		
+		if(exp[position].equalsIgnoreCase("accompagné") ||
+				exp[position].equalsIgnoreCase("accompagnés") ||
+				exp[position].equalsIgnoreCase("accompagnée") ||
+				exp[position].equalsIgnoreCase("accompagnées") ||
+				exp[position].equalsIgnoreCase("et")) {
+				TesteurExpression.nouvPosition = position+1;
+				return true;
+		}
+		
+		return false;
+	}
+	
 }
+
+
