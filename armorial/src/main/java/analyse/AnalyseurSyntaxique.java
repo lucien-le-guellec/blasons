@@ -3,9 +3,10 @@ package analyse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import modele.Blason;
 import modele.Charge;
-import ressources.Partitions;
 import structures.Couleur;
 import structures.Partition;
 
@@ -115,9 +116,11 @@ public class AnalyseurSyntaxique {
 					}
 					
 					Charge charge = new Charge(chargeStr);
+					// Analyse de la charge
+					AnalyserCharge(chargeStr, charge);
 					this.blason.GetQuartierCourant().GetChamp().GetCharges().add(charge);
 					
-					System.out.println("champ chargé : " + charge.GetRepresentation());
+					System.out.println("champ chargé : " + charge.GetExpression());
 				}
 			}
 			// Accompagné d'une charge
@@ -132,9 +135,11 @@ public class AnalyseurSyntaxique {
 					}
 					
 					Charge charge = new Charge(chargeStr);
+					// Analyse de la charge
+					AnalyserCharge(chargeStr, charge);
 					this.blason.GetQuartierCourant().GetChamp().GetCharges().add(charge);
 					
-					System.out.println("accompagné de : " + charge.GetRepresentation());
+					System.out.println("accompagné de : " + charge.GetExpression());
 				}
 			}
 			else {
@@ -210,6 +215,148 @@ public class AnalyseurSyntaxique {
 		}
 		
 	}
+
 	
+	/**
+	 * Analyse l'expression décrivant une charge pour en déterminer la représentation, nombre, couleur(s)...
+	 */
+	private void AnalyserCharge(String chargeStr, Charge charge) {
+		System.out.println("Analyse de la charge : " + chargeStr);
+		
+		String[] exp = chargeStr.split(" ");
+		
+		// Correspondance entre mot et nombre (un/une = 1)
+		String[] nombresStr = {"un", "une", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze",
+								"douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf", "vingt"};
+		
+		boolean meuble = false;
+		boolean piece = false;
+		
+		int position = 0;
+		
+		// Pièce (16) si article défini (18), meuble (17) si article indéfini (24)
+		switch(exp[0].toLowerCase()) {
+		case "à":
+			// Article défini: pièce
+			if(exp[1].equalsIgnoreCase("la")) {
+				charge.SetNombre(1);
+				piece = true;
+				position = 2;
+			}
+			else if (exp[1].substring(0, 2).equalsIgnoreCase("l'")) {
+				charge.SetNombre(1);
+				piece = true;
+				position = 1;
+				// On retire le "l'" 
+				exp[1] = exp[1].substring(2, exp[1].length());
+			}
+			// Nombre: meuble
+			else {
+				// Nombre attendu
+				int index = ArrayUtils.indexOf(nombresStr, exp[1]);
+				if(index != -1) {
+					if(index == 0) {
+						index = 1;
+					}
+					meuble = true;
+					position = 2;
+					charge.SetNombre(index);
+				}
+			}
+			break;
+		case "au":
+			// Piece
+			charge.SetNombre(1);
+			piece = true;
+			position = 1;
+			break;
+		case "aux":
+			// Pièce, nombre attendu
+			int index = ArrayUtils.indexOf(nombresStr, exp[1]);
+			if(index != 1) {
+				if(index == 0) {
+					index = 1;
+				}
+				piece = true;
+				position = 2;
+				charge.SetNombre(index);
+			}
+			break;
+		case "de":
+			// Meuble
+			// Nombre attendu
+			index = ArrayUtils.indexOf(nombresStr, exp[1]);
+			if(index != -1) {
+				if(index == 0) {
+					index = 1;
+				}
+				meuble = true;
+				position = 2;
+				charge.SetNombre(index);
+			}
+			break;
+		default:
+			// Meuble pour "d'un" ou "d'une"
+			if(exp[0].equalsIgnoreCase("d'un") || exp[0].equalsIgnoreCase("d'une")) {
+				meuble = true;
+				position = 1;
+				charge.SetNombre(1);
+			}
+			break;
+		}
+		
+		if(piece) {
+			System.out.println("Pièce identifiée");
+		}
+		else if(meuble) {
+			System.out.println("Meuble identifié");
+		}
+		else {
+			System.out.println("Charge non identifiée");
+		}
+		
+		// Récupération de la dénomination, on va jusqu'à la couleur
+		Couleur c = null;
+		int testeurPos = TesteurExpression.nouvPosition;
+		int origine = position;
+		while(c == null && position < exp.length) {
+			if(TesteurExpression.EstUneCouleur(exp, position)) {
+				// On récupère la couleur
+				c = new Couleur(exp[TesteurExpression.nouvPosition - 1]);
+				charge.GetCouleurs().add(c);
+				
+				String repCharge = "";
+				for(int i = origine; i < position; i++) {
+					repCharge += exp[i] + " ";
+				}
+								
+				charge.SetRepresentation(repCharge);
+				
+				break;
+			}
+			position++;
+		}
+		
+		// On réinitialise la position du testeur
+		TesteurExpression.nouvPosition = testeurPos;
+		
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,11 +1,19 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import structures.Couleur;
+
 /**
  * 	Classe représentant une charge, un élément décoratif et ses informations
  * 
  * 	Attributs:
+ *  - Expression : expression décrivant la charge
  * 	- Représentation : motif représentant graphiquement la charge
  * 	- Emplacement : emplacement par rapport à son contenant
+ *  - Nombre : nombre de motifs composant la charge
+ *  - Couleurs : couleurs de la charge
  * 
  * 	Composition:
  * 	- Une ou plusieurs Charges (une charge peut être chargée)
@@ -13,13 +21,20 @@ package modele;
 public class Charge {
 	
 	protected String representation;
+	protected String exp;
 	protected String emplacement;
 	
+	protected int nombre;
+	
+	protected List<Couleur> couleurs;
+	
 	public Charge(String expression) {
-		this.SetRepresentation(expression);
+		this.SetExpression(expression);
+		this.nombre = 0;
+		this.couleurs = new ArrayList<Couleur>();
 	}
 	
-	public void SetRepresentation(String exp) {
+	public void SetExpression(String exp) {
 		exp = exp.trim();
 		
 		// On retire la ponctuation de fin
@@ -46,11 +61,31 @@ public class Charge {
 			exp = exp.substring(2, exp.length());
 		}
 				
-		this.representation = exp;
+		this.exp = exp.trim();
+	}
+	
+	public String GetExpression() {
+		return this.exp;
+	}
+	
+	public void SetRepresentation(String rep) {
+		this.representation = rep.trim();
 	}
 	
 	public String GetRepresentation() {
 		return this.representation;
+	}
+	
+	public int GetNombre() {
+		return this.nombre;
+	}
+	
+	public void SetNombre(int nb) {
+		this.nombre = nb;
+	}
+	
+	public List<Couleur> GetCouleurs() {
+		return this.couleurs;
 	}
 
 }

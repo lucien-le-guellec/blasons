@@ -10,6 +10,8 @@ import structures.Partition;
 public class TesteurExpression {
 	
 	public static int nouvPosition = 0;
+	
+	public static Couleur derniereCouleur = null;
 
 	/**
 	 * Test de couleur, 
@@ -31,6 +33,11 @@ public class TesteurExpression {
 			position += 1;
 		}
 		
+		// Si "du" on avance
+		if(exp[position].equalsIgnoreCase("du")) {
+			position += 1;
+		}
+		
 		// Si "d'" on retire
 		if(exp[position].length() > 2) {
 			if(exp[position].substring(0, 2).equalsIgnoreCase("d'")) {
@@ -38,11 +45,13 @@ public class TesteurExpression {
 			}
 		}
 		
+		
 		// Test de couleur
 		Couleur test = new Couleur(exp[position]);
 		
 		if (test.getCouleur() != null) {
 			TesteurExpression.nouvPosition = position + 1;
+			TesteurExpression.derniereCouleur = test;
 			return true;
 		}
 		
