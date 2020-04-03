@@ -360,4 +360,258 @@ public class TestAnalyse {
 		assertEquals(c.getBlue(), 231);
 	}
 
+	@Test
+	public void Test202() {
+		System.out.println("Test 202");
+		AnalyseurSyntaxique a = new AnalyseurSyntaxique("Coupé : au premier de gueules aux trois étoiles d'argent rangées en fasce, au second d'argent à la rivière de sinople en fasce.");
+		a.Analyser();
+		
+		// Général
+		Blason b = a.GetBlason();
+		assertEquals(b.GetPartitionnement().GetPartition(), Partitions.COUPE);
+		assertEquals(b.GetQuartiers().size(), 2); // 2 quartiers
+		
+		// 1er quartier
+		Color c = b.GetQuartiers().get(0).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 255); // Couleur gueules
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 0);
+		// Charge
+		List<Charge> cs = b.GetQuartiers().get(0).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "trois étoiles d'argent rangées en fasce");
+		assertEquals(cs.get(0).GetNombre(), 3);
+		assertEquals(cs.get(0).GetRepresentation(), "étoiles");
+		List<Couleur> cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		
+		// second quartier
+		c = b.GetQuartiers().get(1).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		// Charge
+		cs = b.GetQuartiers().get(1).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "rivière de sinople en fasce");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "rivière");
+		cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sinople
+		assertEquals(c.getGreen(), 255);
+		assertEquals(c.getBlue(), 0);
+	}
+
+	@Test
+	public void Test203() {
+		System.out.println("Test 203");
+		AnalyseurSyntaxique a = new AnalyseurSyntaxique("Parti au 1 d'azur à la bande d'or chargé de trois cosses de pois de sinople, au 2 d'argent à la fasce de sinople accompagnée de trois trèfles du même.");
+		a.Analyser();
+		
+		// Général
+		Blason b = a.GetBlason();
+		assertEquals(b.GetPartitionnement().GetPartition(), Partitions.PARTI);
+		assertEquals(b.GetQuartiers().size(), 2); // 2 quartiers
+		
+		// 1er quartier
+		Color c = b.GetQuartiers().get(0).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur azur
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 255);
+		// Charge
+		List<Charge> cs = b.GetQuartiers().get(0).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "bande d'or chargé de trois cosses de pois de sinople");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "bande");
+		List<Couleur> cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 255); // Couleur or
+		assertEquals(c.getGreen(), 241);
+		assertEquals(c.getBlue(), 0);
+		
+		// second quartier
+		c = b.GetQuartiers().get(1).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		// Charges
+		cs = b.GetQuartiers().get(1).GetChamp().GetCharges();
+		assertEquals(cs.size(), 2); // 2 charges
+		// 1ere
+		assertEquals(cs.get(0).GetExpression(), "fasce de sinople");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "fasce");
+		cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sinople
+		assertEquals(c.getGreen(), 255);
+		assertEquals(c.getBlue(), 0);
+		// 2eme
+		assertEquals(cs.get(1).GetExpression(), "trois trèfles du même");
+		assertEquals(cs.get(1).GetNombre(), 3);
+		assertEquals(cs.get(1).GetRepresentation(), "trèfles");
+		cls = cs.get(1).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sinople
+		assertEquals(c.getGreen(), 255);
+		assertEquals(c.getBlue(), 0);
+	}
+	
+	@Test
+	public void Test205() {
+		System.out.println("Test 205");
+		AnalyseurSyntaxique a = new AnalyseurSyntaxique("Ecartelé : aux 1 et 4, d'azur, à une coquille d'argent ; aux 2 et 3, d'argent, à une branche de fougère de sinople posée en pal.");
+		a.Analyser();
+		
+		// Général
+		Blason b = a.GetBlason();
+		assertEquals(b.GetPartitionnement().GetPartition(), Partitions.ECARTELE);
+		assertEquals(b.GetQuartiers().size(), 4); // 4 quartiers
+		assertEquals(b.GetQuartiers().get(0), b.GetQuartiers().get(3)); // Premier quartier identique au quatrième
+		assertEquals(b.GetQuartiers().get(1), b.GetQuartiers().get(2)); // Deuxième quartier identique au troisième
+		
+		// 1er quartier
+		Color c = b.GetQuartiers().get(0).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur azur
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 255);
+		// Charge
+		List<Charge> cs = b.GetQuartiers().get(0).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "une coquille d'argent");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "coquille");
+		List<Couleur> cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		
+		// second quartier
+		c = b.GetQuartiers().get(1).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		// Charge
+		cs = b.GetQuartiers().get(1).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "une branche de fougère de sinople posée en pal");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "branche de fougère");
+		cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sinople
+		assertEquals(c.getGreen(), 255);
+		assertEquals(c.getBlue(), 0);
+	}
+	
+	@Test
+	public void Test204() {
+		System.out.println("Test 204");
+		AnalyseurSyntaxique a = new AnalyseurSyntaxique("Coupé : au premier de gueules aux trois étoiles d'argent rangées en fasce, au second d'argent à la rivière de sinople en fasce.");
+		a.Analyser();
+		
+		// Général
+		Blason b = a.GetBlason();
+		assertEquals(b.GetPartitionnement().GetPartition(), Partitions.COUPE);
+		assertEquals(b.GetQuartiers().size(), 2); // 2 quartiers
+		
+		// 1er quartier
+		Color c = b.GetQuartiers().get(0).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 255); // Couleur gueules
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 0);
+		// Charge
+		List<Charge> cs = b.GetQuartiers().get(0).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "trois étoiles d'argent rangées en fasce");
+		assertEquals(cs.get(0).GetNombre(), 3);
+		assertEquals(cs.get(0).GetRepresentation(), "étoiles");
+		List<Couleur> cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		
+		// second quartier
+		c = b.GetQuartiers().get(1).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 231); // Couleur argent
+		assertEquals(c.getGreen(), 231);
+		assertEquals(c.getBlue(), 231);
+		// Charge
+		cs = b.GetQuartiers().get(1).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "rivière de sinople en fasce");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "rivière");
+		cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sinople
+		assertEquals(c.getGreen(), 255);
+		assertEquals(c.getBlue(), 0);
+	}
+	
+	@Test
+	public void Test206() {
+		System.out.println("Test 206");
+		AnalyseurSyntaxique a = new AnalyseurSyntaxique("Écartelé : aux 1 et 4 d'azur au lévrier courant de sable ; aux 2 et 3 de sable au lion d'or morné.");
+		a.Analyser();
+		
+		// Général
+		Blason b = a.GetBlason();
+		assertEquals(b.GetPartitionnement().GetPartition(), Partitions.ECARTELE);
+		assertEquals(b.GetQuartiers().size(), 4); // 4 quartiers
+		assertEquals(b.GetQuartiers().get(0), b.GetQuartiers().get(3)); // Premier quartier identique au quatrième
+		assertEquals(b.GetQuartiers().get(1), b.GetQuartiers().get(2)); // Deuxième quartier identique au troisième
+		
+		// 1er quartier
+		Color c = b.GetQuartiers().get(0).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur azur
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 255);
+		// Charge
+		List<Charge> cs = b.GetQuartiers().get(0).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "lévrier courant de sable");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "lévrier courant");
+		List<Couleur> cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sable
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 0);
+		
+		// second quartier
+		c = b.GetQuartiers().get(1).GetChamp().GetCouleurs().get(0).getCouleur();
+		assertEquals(c.getRed(), 0); // Couleur sable
+		assertEquals(c.getGreen(), 0);
+		assertEquals(c.getBlue(), 0);
+		// Charge
+		cs = b.GetQuartiers().get(1).GetChamp().GetCharges();
+		assertEquals(cs.size(), 1); // 1 charge
+		assertEquals(cs.get(0).GetExpression(), "lion d'or morné");
+		assertEquals(cs.get(0).GetNombre(), 1);
+		assertEquals(cs.get(0).GetRepresentation(), "lion");
+		cls = cs.get(0).GetCouleurs();
+		assertEquals(cls.size(), 1); // 1 couleur
+		c = cls.get(0).getCouleur();
+		assertEquals(c.getRed(), 255); // Couleur or
+		assertEquals(c.getGreen(), 241);
+		assertEquals(c.getBlue(), 0);
+	}
 }

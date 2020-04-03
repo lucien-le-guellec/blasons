@@ -80,10 +80,17 @@ public class AnalyseurSyntaxique {
 					Partition part = new Partition(this.expression[this.position]);
 					this.blason.GetQuartierCourant().GetChamp().SetPartition(part);
 				}
-				// arme composée (2)
+				// arme composée (2->6)
 				else if(TesteurExpression.EstUnePartitionArme(this.expression, this.position)) {
-					this.etat = 2;
 					System.out.println("Arme composée");
+					Partition partition = new Partition(this.expression[this.position]);
+					if(partition.GetPartition() != null) {
+						this.blason.SetPartitionnement(partition);
+					}
+					else {
+						System.out.println("Partitionnement d'arme non identifié : " + this.expression[this.position]);
+					}
+					this.etat = 6;
 				}
 			}
 			break;
@@ -121,6 +128,13 @@ public class AnalyseurSyntaxique {
 					this.blason.GetQuartierCourant().GetChamp().GetCharges().add(charge);
 					
 					System.out.println("champ chargé : " + charge.GetExpression());
+					
+					// Nouveaux quartiers
+					if(this.position+1 < this.expression.length) {
+						if(TesteurExpression.EstUnOrdre(this.expression, this.position+1)) {
+							this.etat = 6;
+						}
+					}
 				}
 			}
 			// Accompagné d'une charge
@@ -145,6 +159,122 @@ public class AnalyseurSyntaxique {
 			else {
 				// ERREUR de syntaxe
 				System.out.println("Erreur de syntaxe.");
+				this.etat = 99;
+			}
+			break;
+		case 6: // Arme composée, états possibles : ordre(7) ou sortie (3, 32, 99)
+			if(TesteurExpression.EstUnOrdre(this.expression, this.position)) {
+				// Ordre (7)
+				List<Integer> ordres = new ArrayList<Integer>();
+				
+				// Premier ordre
+				// Si ":" on avance
+				if(this.expression[this.position].equalsIgnoreCase(":")) {
+					this.position++;
+				}
+				
+				// Si "en","au","aux" on avance
+				if(this.expression[this.position].equalsIgnoreCase("en") ||	
+						this.expression[this.position].equalsIgnoreCase("au") ||
+						this.expression[this.position].equalsIgnoreCase("aux")) {
+					this.position++;
+				}
+				
+				// Si "," accolée on retire
+				if(this.expression[position].length() > 1) {
+					if(this.expression[position].charAt(1) == ',') {
+						this.expression[position] = this.expression[position].substring(0, 1);
+					}
+				}
+				
+				if(this.expression[this.position].equalsIgnoreCase("1") ||
+						this.expression[this.position].equalsIgnoreCase("premier")) {
+					ordres.add(1);
+				}
+				else if(this.expression[this.position].equalsIgnoreCase("2") ||
+						this.expression[this.position].equalsIgnoreCase("deuxieme") ||
+						this.expression[this.position].equalsIgnoreCase("second")) {
+					ordres.add(2);
+				}
+				else if(this.expression[this.position].equalsIgnoreCase("3") ||
+						this.expression[this.position].equalsIgnoreCase("trosieme")) {
+					ordres.add(3);
+				}
+				else if(this.expression[this.position].equalsIgnoreCase("4") ||
+						this.expression[this.position].equalsIgnoreCase("quatrieme")) {
+					ordres.add(4);
+				}
+				else {
+					System.out.println("Ordre non identifié : " + this.expression[this.position]);
+					this.etat = 99;
+				}
+				
+				this.position++;
+				
+				// Second ordre
+				// Si "et", "&" on avance
+				if(this.expression[position].equalsIgnoreCase("et") ||
+						this.expression[position].equalsIgnoreCase("&")) {
+					this.position++;
+					
+					// Si "en","au","aux" on avance
+					if(this.expression[this.position].equalsIgnoreCase("en") ||	
+							this.expression[this.position].equalsIgnoreCase("au") ||
+							this.expression[this.position].equalsIgnoreCase("aux")) {
+						this.position++;
+					}
+						
+					// Si "," accolée on retire
+					if(this.expression[position].length() > 1) {
+						if(this.expression[position].charAt(1) == ',') {
+							this.expression[position] = this.expression[position].substring(0, 1);
+						}
+					}
+						
+					if(this.expression[this.position].equalsIgnoreCase("2") ||
+							this.expression[this.position].equalsIgnoreCase("deuxieme") ||
+							this.expression[this.position].equalsIgnoreCase("second")) {
+						ordres.add(2);
+					}
+					else if(this.expression[this.position].equalsIgnoreCase("3") ||
+							this.expression[this.position].equalsIgnoreCase("trosieme")) {
+						ordres.add(3);
+					}
+					else if(this.expression[this.position].equalsIgnoreCase("4") ||
+							this.expression[this.position].equalsIgnoreCase("quatrieme")) {
+						ordres.add(4);
+					}
+					else {
+						System.out.println("Second ordre non identifié : " + this.expression[this.position]);
+						this.etat = 99;
+					}
+					
+					this.position++;
+				}
+				
+				System.out.println("Ordres : " + ordres.toString());
+				
+				// L'ordre est déterminé
+				int dernierOrdre = ordres.get(ordres.size()-1);
+				// Création des quartiers
+				while(dernierOrdre > this.blason.GetQuartiers().size()) {
+					this.blason.AddQuartier();
+				}
+				
+				// Gestion de l'ordre secondaire
+				if (ordres.size() > 1) {
+					// L'ordre secondaire fait référence à l'ordre principal
+					this.blason.GetQuartiers().set(ordres.get(1)-1, this.blason.GetQuartiers().get(ordres.get(0)-1));
+				}
+				
+				// On analyse l'expression de l'arme
+				this.blason.SetOrdreActuel(ordres.get(0));
+				this.etat = 4;
+				TesteurExpression.nouvPosition = this.position;
+				System.out.println("pos : " + this.position);
+			}
+			else {
+				// Le "tout" (3 ou 32) ou sortie (99)
 				this.etat = 99;
 			}
 			break;
@@ -201,7 +331,6 @@ public class AnalyseurSyntaxique {
 				// TODO : interprétation à voir ??
 			}
 			else {
-				// ERREUR de syntaxe
 				System.out.println("Erreur de syntaxe, élément attendu : COULEUR");
 			}
 			this.etat = 99;

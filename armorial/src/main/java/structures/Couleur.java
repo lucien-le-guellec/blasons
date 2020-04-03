@@ -79,9 +79,11 @@ public class Couleur {
 			break;
 		case "hermine":
 			// Couleur/motifs, à définir
+			// voir motifs/fourrure_hermine.png
 			break;
 		case "vair":
 			// Couleur/motifs, à définir
+			// voir motifs/fourrure_vair.png
 			break;
 		case "meme":
 			// on récupère la dernière couleur analysée

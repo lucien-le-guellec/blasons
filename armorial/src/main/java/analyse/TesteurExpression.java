@@ -180,11 +180,18 @@ public class TesteurExpression {
 			TesteurExpression.EstUnMeuble(exp, position)) {
 			position = TesteurExpression.nouvPosition;
 			
-			// Atteint une ',' ';' '.' ou la fin
+			// Atteint une ',' ';' '.' ou l'indication d'un nouveau quartier
 			while(position < exp.length) {
 				if (exp[position].charAt(exp[position].length()-1) == ';' ||
 					exp[position].charAt(exp[position].length()-1) == '.') {
 					TesteurExpression.nouvPosition = position + 1;
+					return true;
+				}
+				else if (exp[position].equalsIgnoreCase("accompagné") ||
+						exp[position].equalsIgnoreCase("accompagnés") ||
+						exp[position].equalsIgnoreCase("accompagnée") ||
+						exp[position].equalsIgnoreCase("accompagnées")) {
+					TesteurExpression.nouvPosition = position;
 					return true;
 				}
 				else if(exp[position].charAt(exp[position].length()-1) == ',') {
@@ -193,9 +200,25 @@ public class TesteurExpression {
 						exp[position].equalsIgnoreCase("accompagnés") ||
 						exp[position].equalsIgnoreCase("accompagnée") ||
 						exp[position].equalsIgnoreCase("accompagnées") ||
-						exp[position].equalsIgnoreCase("et")) {
+						exp[position].equalsIgnoreCase("et") ||
+						exp[position].equalsIgnoreCase(";")) { // Séparateur de quartiers
 						TesteurExpression.nouvPosition = position;
 						return true;
+					}
+					// Indication d'un nouveau quartier
+					else if(exp[position].equalsIgnoreCase("au") || 
+							exp[position].equalsIgnoreCase("en")) {
+						position++;
+						if(exp[position].equalsIgnoreCase("deuxieme") ||
+								exp[position].equalsIgnoreCase("second") ||
+								exp[position].equalsIgnoreCase("2") ||
+								exp[position].equalsIgnoreCase("troisieme") ||
+								exp[position].equalsIgnoreCase("3") ||
+								exp[position].equalsIgnoreCase("quatrieme") ||
+								exp[position].equalsIgnoreCase("4")) {
+							TesteurExpression.nouvPosition = position - 1;
+							return true;
+						}
 					}
 				}
 				
@@ -333,6 +356,49 @@ public class TesteurExpression {
 		return false;
 	}
 	
+	/**
+	 * Test d'ordre (par ex : "en 1 et 4") 
+	 * @param exp, expression complète
+	 * @param position, position de l'élément à analyser dans l'expression
+	 * @return true si un ordre est reconnue, false sinon
+	 */
+	public static boolean EstUnOrdre(String[] exp, int position) {
+		exp = exp.clone();
+		
+		// Si ":" on avance
+		if(exp[position].equalsIgnoreCase(":")) {
+			position += 1;
+		}
+		
+		// Si "en","au","aux" on avance
+		if(exp[position].equalsIgnoreCase("en") || 
+			exp[position].equalsIgnoreCase("au") ||
+			exp[position].equalsIgnoreCase("aux")) {
+			position += 1;
+		}
+		
+		// Si "," accolée on retire
+		if(exp[position].length() > 1) {
+			if(exp[position].charAt(1) == ',') {
+				exp[position] = exp[position].substring(0, 1);
+			}
+		}			
+		
+		if(exp[position].equalsIgnoreCase("1") || 
+			exp[position].equalsIgnoreCase("premier") || 
+			exp[position].equalsIgnoreCase("2") || 
+			exp[position].equalsIgnoreCase("deuxieme") ||
+			exp[position].equalsIgnoreCase("second") ||
+			exp[position].equalsIgnoreCase("3") || 
+			exp[position].equalsIgnoreCase("troisieme") || 
+			exp[position].equalsIgnoreCase("4") || 
+			exp[position].equalsIgnoreCase("quatrieme")) {
+			TesteurExpression.nouvPosition = position - 1;
+			return true;
+		}
+		
+		return false;
+	}
 }
 
 
