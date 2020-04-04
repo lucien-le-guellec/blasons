@@ -4,6 +4,7 @@ import analyse.AnalyseurSyntaxique;
 import analyse.TesteurExpression;
 import modele.Blason;
 
+import modele.Charge;
 import modele.Quartier;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -51,11 +52,70 @@ public class Reconstitution {
         fond.setAttribute("groupmode", "layer", inkscape);
         fond.setAttribute("clip-path", "url(#shield_cut)");
         fond.setAttribute("style", "stroke:#000;stroke-width:3");
+        List<Element> charges = new ArrayList<>();
         if (blason.GetQuartiers().size() == 1) {
             Partition partition = blason.GetQuartierCourant().GetChamp().GetPartition();
             Couleur[] couleurs = blason.GetQuartierCourant().GetChamp().GetCouleurs().toArray(new Couleur[0]);
-            if (partition == null)
+            if (partition == null) {
                 fond.addContent(fondPlein(couleurs));
+                int nCouche = 0;
+                // meuble
+                for (Charge c : blason.GetQuartierCourant().GetChamp().GetCharges()){
+                    nCouche++;
+                    Element charge = new Element("g", xmlns);
+                    charge.setAttribute("id", "layer3-"+nCouche);
+                    charge.setAttribute("label", "Charge", inkscape);
+                    charge.setAttribute("groupmode", "layer", inkscape);
+                    charge.setAttribute("clip-path", "url(#shield_cut)");
+                    //charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                    switch (c.GetRepresentation()) {
+                        // pièces
+                        case "chef":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerChef(c.GetCouleurs().get(0)));
+                            break;
+                        case "fasce":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerFasce(c.GetCouleurs().get(0)));
+                            break;
+                        case "pal":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerPal(c.GetCouleurs().get(0)));
+                            break;
+                        case "pals":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            for (Element pal : dessinerPals(c.GetNombre(), c.GetCouleurs().get(0)))
+                                charge.addContent(pal);
+                            break;
+                        case "canton":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerCanton(c.GetCouleurs().get(0)));
+                            break;
+                        case "croix":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerCroix(c.GetCouleurs().get(0)));
+                            break;
+                        case "sautoir":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerSautoir(c.GetCouleurs().get(0)));
+                            break;
+                        case "bande":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerBande(c.GetCouleurs().get(0)));
+                            break;
+                        case "barre":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerBarre(c.GetCouleurs().get(0)));
+                            break;
+                        case "chevron":
+                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.addContent(dessinerChevron(c.GetCouleurs().get(0)));
+                            break;
+                        // meubles
+                    }
+                    charges.add(charge);
+                }
+            }
             else
                 switch (partition.GetPartition()) {
                     case PARTI:
@@ -113,6 +173,9 @@ public class Reconstitution {
 
         }
         racine.addContent(fond);
+        for (Element charge : charges)
+            racine.addContent(charge);
+
 
         //meubles
 
@@ -387,8 +450,99 @@ public class Reconstitution {
         return new Element[]{un, deux, trois, quatre};
     }
 
+    private Element dessinerChef(Couleur couleur) {
+        Element rect = new Element("rect", xmlns);
+        rect.setAttribute("x","-300");
+        rect.setAttribute("y","-300");
+        rect.setAttribute("width","600");
+        rect.setAttribute("height","180");
+        rect.setAttribute("fill", jolieCouleur(couleur));
+        return rect;
+    }
+
+    private Element dessinerFasce(Couleur couleur) {
+        Element rect = new Element("rect", xmlns);
+        rect.setAttribute("x","-300");
+        rect.setAttribute("y","-87");
+        rect.setAttribute("width","600");
+        rect.setAttribute("height","134");
+        rect.setAttribute("fill", jolieCouleur(couleur));
+        return rect;
+    }
+
+    private Element dessinerPal(Couleur couleur) {
+        Element rect = new Element("rect", xmlns);
+        rect.setAttribute("x","-67");
+        rect.setAttribute("y","-300");
+        rect.setAttribute("width","134");
+        rect.setAttribute("height","660");
+        rect.setAttribute("fill", jolieCouleur(couleur));
+        return rect;
+    }
+
+    private Element[] dessinerPals(int nombre, Couleur couleur) {
+        Element[] pals = new Element[nombre];
+        float largeur = (float) (600.0/(2*nombre+1));
+        for (int i=0; i<nombre; i++){
+            Element rect = new Element("rect", xmlns);
+            rect.setAttribute("x",String.valueOf(2*largeur*i+largeur-300));
+            rect.setAttribute("y","-300");
+            rect.setAttribute("width",String.valueOf(largeur));
+            rect.setAttribute("height","660");
+            rect.setAttribute("fill", jolieCouleur(couleur));
+            pals[i] = rect;
+        }
+        return pals;
+    }
+
+    private Element dessinerCanton(Couleur couleur) {
+        Element rect = new Element("rect", xmlns);
+        rect.setAttribute("x","-300");
+        rect.setAttribute("y","-300");
+        rect.setAttribute("width","180");
+        rect.setAttribute("height","180");
+        rect.setAttribute("fill", jolieCouleur(couleur));
+        return rect;
+    }
+
+    private Element dessinerCroix(Couleur couleur) {
+        Element croix = new Element("polygon", xmlns);
+        croix.setAttribute("points","-67 -300, 67 -300, 67 -87, 300 -87, 300 47, 67 47, 67 660, -67 660, -67 47, -300 47, -300 -87, -67 -87");
+        croix.setAttribute("fill", jolieCouleur(couleur));
+        return croix;
+    }
+
+    private Element dessinerSautoir(Couleur couleur) {
+        Element sautoir = new Element("polygon", xmlns);
+        sautoir.setAttribute("points","-300 -300, -205 -300, 0 -95, 205 -300, 300 -300, 300 -195, 95 0, 300 205, 205 300, 0 95, -205 300, -300 205, -95 0, -300 -205");
+        sautoir.setAttribute("fill", jolieCouleur(couleur));
+        return sautoir;
+    }
+
+    private Element dessinerBande(Couleur couleur) {
+        Element bande = new Element("polygon", xmlns);
+        bande.setAttribute("points","-300 -300, -205 -300, 300 205, 205 300, -300 -205");
+        bande.setAttribute("fill", jolieCouleur(couleur));
+        return bande;
+    }
+
+    private Element dessinerBarre(Couleur couleur) {
+        Element barre = new Element("polygon", xmlns);
+        barre.setAttribute("points","205 -300, 300 -300, 300 -195, -205 300, -300 205");
+        barre.setAttribute("fill", jolieCouleur(couleur));
+        return barre;
+    }
+
+    private Element dessinerChevron(Couleur couleur) {
+        Element chevron = new Element("polygon", xmlns);
+        chevron.setAttribute("points","0 -198, 300 123, 300 272, 0 -26, -300 272, -300 123");
+        chevron.setAttribute("fill", jolieCouleur(couleur));
+        return chevron;
+    }
+
+
     public static void main(String[] args){
-        AnalyseurSyntaxique a = new AnalyseurSyntaxique("Coupé d'or et de gueules.");
+        AnalyseurSyntaxique a = new AnalyseurSyntaxique("De gueules à un chevron d'or.");
         a.Analyser();
         Blason b = a.GetBlason();
         Reconstitution r = new Reconstitution(b);
