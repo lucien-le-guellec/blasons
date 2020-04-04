@@ -1,27 +1,20 @@
 package svg;
 
 import analyse.AnalyseurSyntaxique;
-import analyse.TesteurExpression;
 import modele.Blason;
 
 import modele.Charge;
 import modele.Quartier;
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
+import org.jdom2.*;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.jdom2.Element;
-import ressources.Partitions;
 import structures.Couleur;
 import structures.Partition;
 
+import java.io.*;
 import java.util.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
 
 public class Reconstitution {
 
@@ -59,14 +52,13 @@ public class Reconstitution {
             if (partition == null) {
                 fond.addContent(fondPlein(couleurs));
                 int nCouche = 0;
-                // meuble
+                // charge
                 for (Charge c : blason.GetQuartierCourant().GetChamp().GetCharges()){
                     nCouche++;
                     Element charge = new Element("g", xmlns);
                     charge.setAttribute("id", "layer3-"+nCouche);
                     charge.setAttribute("label", "Charge", inkscape);
                     charge.setAttribute("groupmode", "layer", inkscape);
-                    charge.setAttribute("clip-path", "url(#shield_cut)");
                     //charge.setAttribute("style", "stroke:#000;stroke-width:3");
                     switch (c.GetRepresentation()) {
                         // pièces
@@ -111,7 +103,36 @@ public class Reconstitution {
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
                             charge.addContent(dessinerChevron(c.GetCouleurs().get(0)));
                             break;
+
                         // meubles
+                        case "lion":
+                            charge.setAttribute("transform", "translate(-223,-298) scale(0.812,0.845)");
+                            for (Element path : dessinerLion(c.GetCouleurs().get(0))){
+                                charge.addContent(path.setNamespace(xmlns));
+                            }
+                            break;
+                        case "aigle":
+                            charge.setAttribute("transform", "translate(-150,-200) scale(0.42,0.42)");
+                            for (Element path : dessinerAigle(c.GetCouleurs().get(0))){
+                                charge.addContent(path.setNamespace(xmlns));
+                            }
+                            break;
+
+
+//                        meubles dont le nombre peut varier
+//
+//                        case "coquilles":
+//                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+//                            charge.addContent(dessinerChevron(c.GetCouleurs().get(0)));
+//                            break;
+//                        case "écussons":
+//                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+//                            charge.addContent(dessinerChevron(c.GetCouleurs().get(0)));
+//                            break;
+//                        case "roses":
+//                            charge.setAttribute("style", "stroke:#000;stroke-width:3");
+//                            charge.addContent(dessinerChevron(c.GetCouleurs().get(0)));
+//                            break;
                     }
                     charges.add(charge);
                 }
@@ -540,9 +561,59 @@ public class Reconstitution {
         return chevron;
     }
 
+    private List<Element> dessinerLion(Couleur couleur)  {
+        Element lion = new Element("g", xmlns);
+        InputStream is = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = new FileInputStream("SVG/lion.svg");
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+            String line = buf.readLine();
+            while(line != null){
+                sb.append(line).append("\n");
+                line = buf.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String lionString = sb.toString().replace("?couleur", jolieCouleur(couleur));
+        try {
+            lion = ((new SAXBuilder()).build((new StringReader(lionString))).getRootElement().detach());
+        } catch (JDOMException | IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return lion.removeContent(Filters.element());
+    }
+
+    private List<Element> dessinerAigle(Couleur couleur)  {
+        Element aigle = new Element("g", xmlns);
+        InputStream is = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = new FileInputStream("SVG/aigle.svg");
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+            String line = buf.readLine();
+            while(line != null){
+                sb.append(line).append("\n");
+                line = buf.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String aigleString = sb.toString().replace("?couleur1", jolieCouleur(couleur)).replace("?couleur2", jolieCouleur(couleur));
+        try {
+            aigle = ((new SAXBuilder()).build((new StringReader(aigleString))).getRootElement().detach());
+        } catch (JDOMException | IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return aigle.removeContent(Filters.element());
+    }
+
 
     public static void main(String[] args){
-        AnalyseurSyntaxique a = new AnalyseurSyntaxique("De gueules à un chevron d'or.");
+        AnalyseurSyntaxique a = new AnalyseurSyntaxique("D'azur à l'aigle d'or.");
         a.Analyser();
         Blason b = a.GetBlason();
         Reconstitution r = new Reconstitution(b);
