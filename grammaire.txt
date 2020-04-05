@@ -1,0 +1,31 @@
+Cas simple :
+    Commence par :
+        - d' ou de + une couleur (+ "semé de" + couleur "de" ou non) (+ partition secondaire ou non + de + autre couleur)
+        - de + une fourrure
+	Puis :
+	    - "plain"
+		- pièce + couleur ou fourrure
+		- meuble + couleur
+		
+Cas complexes :
+	Commence par :
+		- une partition primaire (+ émanché ou non)
+
+
+penser aux nombres (en chiffres ou en lettres), et au pluriel qu'ils impliquent, ainsi qu'aux articles définis
+
+couleurs : {argent, or, azur, gueules, sinople, sable, "même"}
+
+fourrures : {hermine, vair, contre-vair, "même"}
+
+partitions secondaires :  {chapé, chaussé, embrassé, adextré, senestré, mantelé, vêtu}
+
+semés : {lys, grelots, billettes, abeilles, croisettes, feuilles de houx}
+
+partitions primaires : {parti, coupé, tranché, taillé, écartelé, écartelé en sautoir, échiqueté, équipollé, gironné, tiercé, vairé, mantelé}
+
+pièces : {bande, barre, bâton, bâton péri, bordure, burelle, canton, franc-canton, franc-quartier, champâgne, chef, chevron, comble, cotice, croix, devise, divise, émanche, émanchure, escarre, fasce, flanc*, giron, gousset, hamade, hamaide, hameide, jumelle, lambel, mantel, orle, pairle, pal, pile, pointe, sautoir, traverse, vergette, }
+
+meubles : nombreux
+
+"fleurs de lis", "fleurs-de-lis", "fleurs de lys", "fleurs-de-lys", "lis" et "lys" sont synonymes

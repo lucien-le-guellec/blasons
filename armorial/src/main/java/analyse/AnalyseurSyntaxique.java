@@ -361,7 +361,7 @@ public class AnalyseurSyntaxique {
 	
 	/**
 	 * Analyse l'expression décrivant une charge pour en déterminer la représentation, nombre, couleur(s)...
-	 * @param chargStr, l'expression décrivant la charge
+	 * @param chargeStr, l'expression décrivant la charge
 	 * @param charge, l'objet charge à structurer
 	 */
 	private void AnalyserCharge(String chargeStr, Charge charge) {

@@ -16,6 +16,11 @@ import structures.Partition;
 import java.io.*;
 import java.util.*;
 
+/**
+ * 	Permet la reconstitution du dessin d'un blason
+ * 	et l'écrit dans un fichier au format SVG
+ *
+ */
 public class Reconstitution {
 
     private Element racine;
@@ -25,6 +30,10 @@ public class Reconstitution {
     private Namespace xlink;
     private Blason blason;
 
+    /**
+     * Constructeur de la classe, qui contient aussi l'opération de reconstitution
+     * @param blason, le blason à dessiner
+     */
     public Reconstitution(Blason blason){
         this.blason = blason;
 
@@ -207,9 +216,6 @@ public class Reconstitution {
         for (Element charge : charges)
             racine.addContent(charge);
 
-
-        //meubles
-
         // reflet
         Element reflet = new Element("g", xmlns);
         reflet.setAttribute("id", "layer2");
@@ -236,6 +242,11 @@ public class Reconstitution {
 
     }
 
+    /**
+     * Écriture du fichier SVG
+     * @param chemin, le dossier où écrire le fichier
+     * @param nom, le nom du fichier
+     */
     private void ecrireSVG(String chemin, String nom){
         Document xml=new Document();
         xml.setRootElement(racine);
@@ -248,6 +259,11 @@ public class Reconstitution {
         }
     }
 
+    /**
+     * Modifie légèrement les couleurs pour qu'elles soient plus jolies sur le dessin
+     * @param c, la couleur initiale
+     * @return le code hexadécimal de la jolie couleur
+     */
     private static String jolieCouleur(Couleur c){
         String hexa = "";
         switch(c.toString()) {
@@ -285,6 +301,10 @@ public class Reconstitution {
         return hexa;
     }
 
+    /**
+     * Crée l'élément racine de l'arbre XML
+     * @return l'élément initialisé avec la forme du blason et l'en-tête <svg>, mais vide
+     */
     private static Element racine(){
         // racine
         Element racine =new Element("svg");
@@ -310,6 +330,11 @@ public class Reconstitution {
         return racine;
     }
 
+    /**
+     * Dessine le fond d'un blason simple
+     * @param couleurs, le tableau contenant la couleur du fond
+     * @return l'élément <use> de l'arbre XML qui dessine le fond
+     */
     private Element fondPlein(Couleur[] couleurs) {
         Element useFond = new Element("use", xmlns);
         useFond.setAttribute("href","#shield", xlink);
@@ -317,6 +342,11 @@ public class Reconstitution {
         return useFond;
     }
 
+    /**
+     * Dessine le fond d'un blason coupé
+     * @param couleurs, le tableau contenant les couleur du fond
+     * @return les deux éléments <rect> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondCoupe(Couleur[] couleurs) {
         Element haut = new Element("rect", xmlns);
         haut.setAttribute("x","-300");
@@ -332,6 +362,11 @@ public class Reconstitution {
         return new Element[]{haut, bas};
     }
 
+    /**
+     * Dessine le fond d'un blason parti
+     * @param couleurs, le tableau contenant les couleur du fond
+     * @return les deux éléments <rect> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondParti(Couleur[] couleurs) {
         Element gauche = new Element("rect", xmlns);
         gauche.setAttribute("x","-300");
@@ -347,6 +382,11 @@ public class Reconstitution {
         return new Element[]{gauche, droite};
     }
 
+    /**
+     * Dessine le fond d'un blason taillé
+     * @param couleurs, le tableau contenant les couleur du fond
+     * @return les deux éléments <polygon> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondTaille(Couleur[] couleurs) {
         Element un = new Element("polygon", xmlns);
         un.setAttribute("points","300 -300, -300 -300, -300 360");
@@ -357,6 +397,11 @@ public class Reconstitution {
         return new Element[]{un, deux};
     }
 
+    /**
+     * Dessine le fond d'un blason tranché
+     * @param couleurs, le tableau contenant les couleur du fond
+     * @return les deux éléments <polygon> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondTranche(Couleur[] couleurs) {
         Element un = new Element("polygon", xmlns);
         un.setAttribute("points","300 -300, -300 -300, 300 360");
@@ -367,6 +412,11 @@ public class Reconstitution {
         return new Element[]{un, deux};
     }
 
+    /**
+     * Dessine le fond d'un blason écartelé
+     * @param couleurs, le tableau contenant les couleur du fond
+     * @return les quatre éléments <rect> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondEcartele(Couleur[] couleurs) {
         Element un = new Element("rect", xmlns);
         un.setAttribute("x","-300");
@@ -391,6 +441,11 @@ public class Reconstitution {
         return new Element[]{un, deux, trois, quatre};
     }
 
+    /**
+     * Dessine le fond d'un blason coupé en plusieurs quartiers
+     * @param quartiers, le tableau contenant les quartiers du blason
+     * @return les deux éléments <rect> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondCoupe(Quartier[] quartiers) {
         Element haut = new Element("rect", xmlns);
         haut.setAttribute("x","-300");
@@ -406,6 +461,11 @@ public class Reconstitution {
         return new Element[]{haut, bas};
     }
 
+    /**
+     * Dessine le fond d'un blason parti en plusieurs quartiers
+     * @param quartiers, le tableau contenant les quartiers du blason
+     * @return les deux éléments <rect> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondParti(Quartier[] quartiers) {
         Element gauche = new Element("rect", xmlns);
         gauche.setAttribute("x","-300");
@@ -421,6 +481,11 @@ public class Reconstitution {
         return new Element[]{gauche, droite};
     }
 
+    /**
+     * Dessine le fond d'un blason taillé en plusieurs quartiers
+     * @param quartiers, le tableau contenant les quartiers du blason
+     * @return les deux éléments <polygon> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondTaille(Quartier[] quartiers) {
         Element un = new Element("polygon", xmlns);
         un.setAttribute("points","300 -300, -300 -300, -300 360");
@@ -431,6 +496,11 @@ public class Reconstitution {
         return new Element[]{un, deux};
     }
 
+    /**
+     * Dessine le fond d'un blason tranché en plusieurs quartiers
+     * @param quartiers, le tableau contenant les quartiers du blason
+     * @return les deux éléments <polygon> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondTranche(Quartier[] quartiers) {
         Element un = new Element("polygon", xmlns);
         un.setAttribute("points","300 -300, -300 -300, 300 360");
@@ -441,6 +511,11 @@ public class Reconstitution {
         return new Element[]{un, deux};
     }
 
+    /**
+     * Dessine le fond d'un blason écartelé en plusieurs quartiers
+     * @param quartiers, le tableau contenant les quartiers du blason
+     * @return les quatre éléments <rect> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondEcartele(Quartier[] quartiers) {
         Element un = new Element("rect", xmlns);
         un.setAttribute("x","-300");
@@ -465,6 +540,11 @@ public class Reconstitution {
         return new Element[]{un, deux, trois, quatre};
     }
 
+    /**
+     * Dessine le fond d'un blason écartelé en sautoir en plusieurs quartiers
+     * @param quartiers, le tableau contenant les quartiers du blason
+     * @return les quatre éléments <polygon> de l'arbre XML qui dessinent le fond
+     */
     private Element[] fondEcarteleSautoir(Quartier[] quartiers) {
         Element un = new Element("polygon", xmlns);
         un.setAttribute("points","300 -300, -300 -300, 0 0");
@@ -481,6 +561,11 @@ public class Reconstitution {
         return new Element[]{un, deux, trois, quatre};
     }
 
+    /**
+     * Dessine le chef d'un blason simple
+     * @param couleur, la couleur du chef
+     * @return l'élément <rect> de l'arbre XML qui dessine le chef
+     */
     private Element dessinerChef(Couleur couleur) {
         Element rect = new Element("rect", xmlns);
         rect.setAttribute("x","-300");
@@ -491,6 +576,11 @@ public class Reconstitution {
         return rect;
     }
 
+    /**
+     * Dessine la fasce d'un blason simple
+     * @param couleur, la couleur de la fasce
+     * @return l'élément <rect> de l'arbre XML qui dessine la fasce
+     */
     private Element dessinerFasce(Couleur couleur) {
         Element rect = new Element("rect", xmlns);
         rect.setAttribute("x","-300");
@@ -501,6 +591,11 @@ public class Reconstitution {
         return rect;
     }
 
+    /**
+     * Dessine un pal sur un blason simple
+     * @param couleur, la couleur du pal
+     * @return l'élément <rect> de l'arbre XML qui dessine le pal
+     */
     private Element dessinerPal(Couleur couleur) {
         Element rect = new Element("rect", xmlns);
         rect.setAttribute("x","-67");
@@ -511,6 +606,12 @@ public class Reconstitution {
         return rect;
     }
 
+    /**
+     * Dessine plusieurs pals sur un blason simple
+     * @param nombre, le nombre de pals
+     * @param couleur, la couleur des pals
+     * @return les éléments <rect> de l'arbre XML qui dessinent les pals
+     */
     private Element[] dessinerPals(int nombre, Couleur couleur) {
         Element[] pals = new Element[nombre];
         float largeur = (float) (600.0/(2*nombre+1));
@@ -526,6 +627,11 @@ public class Reconstitution {
         return pals;
     }
 
+    /**
+     * Dessine le canton d'un blason simple
+     * @param couleur, la couleur du canton
+     * @return l'élément <rect> de l'arbre XML qui dessine le canton
+     */
     private Element dessinerCanton(Couleur couleur) {
         Element rect = new Element("rect", xmlns);
         rect.setAttribute("x","-300");
@@ -536,6 +642,11 @@ public class Reconstitution {
         return rect;
     }
 
+    /**
+     * Dessine une croix sur un blason simple
+     * @param couleur, la couleur de la croix
+     * @return l'élément <polygon> de l'arbre XML qui dessine la croix
+     */
     private Element dessinerCroix(Couleur couleur) {
         Element croix = new Element("polygon", xmlns);
         croix.setAttribute("points","-67 -300, 67 -300, 67 -87, 300 -87, 300 47, 67 47, 67 660, -67 660, -67 47, -300 47, -300 -87, -67 -87");
@@ -543,6 +654,11 @@ public class Reconstitution {
         return croix;
     }
 
+    /**
+     * Dessine un sautoir sur un blason simple
+     * @param couleur, la couleur du sautoir
+     * @return l'élément <polygon> de l'arbre XML qui dessine le sautoir
+     */
     private Element dessinerSautoir(Couleur couleur) {
         Element sautoir = new Element("polygon", xmlns);
         sautoir.setAttribute("points","-300 -300, -205 -300, 0 -95, 205 -300, 300 -300, 300 -195, 95 0, 300 205, 205 300, 0 95, -205 300, -300 205, -95 0, -300 -205");
@@ -550,6 +666,11 @@ public class Reconstitution {
         return sautoir;
     }
 
+    /**
+     * Dessine une bande sur un blason simple
+     * @param couleur, la couleur de la bande
+     * @return l'élément <polygon> de l'arbre XML qui dessine la bande
+     */
     private Element dessinerBande(Couleur couleur) {
         Element bande = new Element("polygon", xmlns);
         bande.setAttribute("points","-300 -300, -205 -300, 300 205, 205 300, -300 -205");
@@ -557,6 +678,11 @@ public class Reconstitution {
         return bande;
     }
 
+    /**
+     * Dessine une barre sur un blason simple
+     * @param couleur, la couleur de la barre
+     * @return l'élément <polygon> de l'arbre XML qui dessine la barre
+     */
     private Element dessinerBarre(Couleur couleur) {
         Element barre = new Element("polygon", xmlns);
         barre.setAttribute("points","205 -300, 300 -300, 300 -195, -205 300, -300 205");
@@ -564,6 +690,11 @@ public class Reconstitution {
         return barre;
     }
 
+    /**
+     * Dessine un chevron sur un blason simple
+     * @param couleur, la couleur du chevron
+     * @return l'élément <polygon> de l'arbre XML qui dessine le chevron
+     */
     private Element dessinerChevron(Couleur couleur) {
         Element chevron = new Element("polygon", xmlns);
         chevron.setAttribute("points","0 -198, 300 123, 300 272, 0 -26, -300 272, -300 123");
@@ -571,6 +702,11 @@ public class Reconstitution {
         return chevron;
     }
 
+    /**
+     * Dessine un lion sur un blason simple
+     * @param couleur, la couleur du lion
+     * @return les éléments <path> de l'arbre XML qui dessinent le lion
+     */
     private List<Element> dessinerLion(Couleur couleur)  {
         Element lion = new Element("g", xmlns);
         InputStream is = null;
@@ -596,6 +732,11 @@ public class Reconstitution {
         return lion.removeContent(Filters.element());
     }
 
+    /**
+     * Dessine une aigle sur un blason simple
+     * @param couleur, la couleur de l'aigle
+     * @return les éléments <path> de l'arbre XML qui dessinent l'aigle
+     */
     private List<Element> dessinerAigle(Couleur couleur)  {
         Element aigle = new Element("g", xmlns);
         InputStream is = null;
@@ -622,6 +763,9 @@ public class Reconstitution {
     }
 
 
+    /**
+     * Fonction principale servant à essayer la classe
+     */
     public static void main(String[] args){
         AnalyseurSyntaxique a = new AnalyseurSyntaxique("d'or à quatre pals de gueules");
         a.Analyser();

@@ -15,6 +15,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1WqWZGmlnoFtFpE0kxeXxpiOAgM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -87,6 +88,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1876" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1579904284402" />
+    <state x="497" y="175" key="Maven.ArtifactSearchDialog" timestamp="1586097818642">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="497" y="175" key="Maven.ArtifactSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586097818642" />
     <state x="473" y="150" key="SettingsEditor" timestamp="1579879331822">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
