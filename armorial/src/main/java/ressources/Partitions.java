@@ -2,7 +2,6 @@ package ressources;
 
 /**
  * Enumération des partitions possibles
- * @author Valentin MAURICE
  *
  */
 public enum Partitions {
