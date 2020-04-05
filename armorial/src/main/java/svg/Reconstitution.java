@@ -64,43 +64,53 @@ public class Reconstitution {
                         // pièces
                         case "chef":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerChef(c.GetCouleurs().get(0)));
                             break;
                         case "fasce":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerFasce(c.GetCouleurs().get(0)));
                             break;
                         case "pal":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerPal(c.GetCouleurs().get(0)));
                             break;
                         case "pals":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             for (Element pal : dessinerPals(c.GetNombre(), c.GetCouleurs().get(0)))
                                 charge.addContent(pal);
                             break;
                         case "canton":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerCanton(c.GetCouleurs().get(0)));
                             break;
                         case "croix":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerCroix(c.GetCouleurs().get(0)));
                             break;
                         case "sautoir":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerSautoir(c.GetCouleurs().get(0)));
                             break;
                         case "bande":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerBande(c.GetCouleurs().get(0)));
                             break;
                         case "barre":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerBarre(c.GetCouleurs().get(0)));
                             break;
                         case "chevron":
                             charge.setAttribute("style", "stroke:#000;stroke-width:3");
+                            charge.setAttribute("clip-path", "url(#shield_cut)");
                             charge.addContent(dessinerChevron(c.GetCouleurs().get(0)));
                             break;
 
@@ -447,11 +457,11 @@ public class Reconstitution {
         trois.setAttribute("x","-300");
         trois.setAttribute("width","300");
         trois.setAttribute("height","360");
-        trois.setAttribute("fill", jolieCouleur(quartiers[1].GetChamp().GetCouleurs().get(0)));
+        trois.setAttribute("fill", jolieCouleur(quartiers[2].GetChamp().GetCouleurs().get(0)));
         Element quatre = new Element("rect", xmlns);
         quatre.setAttribute("width","300");
         quatre.setAttribute("height","360");
-        quatre.setAttribute("fill", jolieCouleur(quartiers[0].GetChamp().GetCouleurs().get(0)));
+        quatre.setAttribute("fill", jolieCouleur(quartiers[3].GetChamp().GetCouleurs().get(0)));
         return new Element[]{un, deux, trois, quatre};
     }
 
@@ -464,10 +474,10 @@ public class Reconstitution {
         deux.setAttribute("fill", jolieCouleur(quartiers[1].GetChamp().GetCouleurs().get(0)));
         Element trois = new Element("polygon", xmlns);
         trois.setAttribute("points","300 -300, 0 0, 300 360");
-        trois.setAttribute("fill", jolieCouleur(quartiers[1].GetChamp().GetCouleurs().get(0)));
+        trois.setAttribute("fill", jolieCouleur(quartiers[2].GetChamp().GetCouleurs().get(0)));
         Element quatre = new Element("polygon", xmlns);
         quatre.setAttribute("points","300 360, 0 0, -300 360");
-        quatre.setAttribute("fill", jolieCouleur(quartiers[0].GetChamp().GetCouleurs().get(0)));
+        quatre.setAttribute("fill", jolieCouleur(quartiers[3].GetChamp().GetCouleurs().get(0)));
         return new Element[]{un, deux, trois, quatre};
     }
 
@@ -613,7 +623,7 @@ public class Reconstitution {
 
 
     public static void main(String[] args){
-        AnalyseurSyntaxique a = new AnalyseurSyntaxique("D'azur à l'aigle d'or.");
+        AnalyseurSyntaxique a = new AnalyseurSyntaxique("d'or à quatre pals de gueules");
         a.Analyser();
         Blason b = a.GetBlason();
         Reconstitution r = new Reconstitution(b);
