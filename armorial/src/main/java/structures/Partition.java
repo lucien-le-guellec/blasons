@@ -4,6 +4,10 @@ import java.text.Normalizer;
 
 import ressources.Partitions;
 
+/**
+ *	Classe associant une expression à la partition correspondante
+ *
+ */
 public class Partition {
 
 	private Partitions partition;
@@ -13,6 +17,10 @@ public class Partition {
 		this.SetPartition(exp);
 	}
 	
+	/**
+	 * Setter de la partition en fonction de l'expression
+	 * @param exp, expression à utiliser
+	 */
 	public void SetPartition(String exp) {
 		// Normalisation de l'expression
 		String n_exp = exp.toLowerCase();
@@ -42,6 +50,10 @@ public class Partition {
 		}
 	}
 	
+	/**
+	 * Getter de la partition
+	 * @return partition
+	 */
 	public Partitions GetPartition() {
 		return this.partition;
 	}

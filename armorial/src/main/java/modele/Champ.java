@@ -11,8 +11,7 @@ import structures.Partition;
  * 
  * 	Attributs:
  * 	- Couleurs : couleur(s) de représentation
- *  - Partitionnement : divisions du champ en sous parties le cas échéant
- *  - Composition : composition du champ en de multiples sous éléments réguliers le cas échéant
+ *  - Partition : divisions du champ en sous parties le cas échéant
  *  
  * 	Composition:
  * 	- Une ou plusieurs Charges
@@ -32,22 +31,42 @@ public class Champ {
 		this.partition = null;
 	}
 	
+	/**
+	 * Setter des couleurs
+	 * @param nouvCouls, nouvelles couleurs à utiliser
+	 */
 	public void SetCouleurs(List<Couleur> nouvCouls) {
 		this.couleurs = nouvCouls;
 	}
 	
+	/**
+	 * Getter des couleurs
+	 * @return couleurs
+	 */
 	public List<Couleur> GetCouleurs() {
 		return this.couleurs;
 	}
 	
+	/**
+	 * Getter des charges
+	 * @return charges
+	 */
 	public List<Charge> GetCharges() {
 		return this.charges;
 	}
 	
+	/**
+	 * Setter de la partition
+	 * @param part
+	 */
 	public void SetPartition(Partition part) {
 		this.partition = part;
 	}
 	
+	/**
+	 * Getter de la partition
+	 * @return partition
+	 */
 	public Partition GetPartition() {
 		return this.partition;
 	}
