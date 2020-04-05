@@ -25,6 +25,10 @@ public class AnalyseurSyntaxique {
 	
 	private Blason blason;
 	
+	/**
+	 * Constructeur principal
+	 * @param phrase, phrase à analyser
+	 */
 	public AnalyseurSyntaxique(String phrase) {
 		this.phrase = phrase;
 		this.expression = phrase.split(" ");
@@ -34,10 +38,19 @@ public class AnalyseurSyntaxique {
 		TesteurExpression.nouvPosition = 0;
 	}
 	
+	/**
+	 * Getter de l'objet blason
+	 * @return true si une partition est reconnue, false sinon
+	 */
 	public Blason GetBlason() {
 		return this.blason;
 	}
 	
+	/**
+	 * Méthode principale : analyse la phrase de blasonnement et créé l'objet blason
+	 * Fait appel à AnalyserSuivant pour analyser l'expression suivante jusqu'à la fin de la phrase.
+	 * @return Blason, l'objet blason créé
+	 */
 	public Blason Analyser() {
 		System.out.println("Analyse de : " + this.phrase);
 		
@@ -53,8 +66,8 @@ public class AnalyseurSyntaxique {
 	}
 	
 	/**
-	 * 	Permet à partir d'un état initial et de la position actuelle dans l'expression de déterminer l'état suivant
-	 * 	et le/les éléments structurels associés le cas échéant.
+	 * Permet à partir d'un état initial et de la position actuelle dans l'expression de déterminer l'état suivant
+	 * et le/les éléments structurels associés le cas échéant.
 	 */
 	private void AnalyserSuivant( ) {
 		
@@ -348,6 +361,8 @@ public class AnalyseurSyntaxique {
 	
 	/**
 	 * Analyse l'expression décrivant une charge pour en déterminer la représentation, nombre, couleur(s)...
+	 * @param chargStr, l'expression décrivant la charge
+	 * @param charge, l'objet charge à structurer
 	 */
 	private void AnalyserCharge(String chargeStr, Charge charge) {
 		System.out.println("Analyse de la charge : " + chargeStr);

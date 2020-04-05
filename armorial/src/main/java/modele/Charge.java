@@ -34,6 +34,11 @@ public class Charge {
 		this.couleurs = new ArrayList<Couleur>();
 	}
 	
+	/**
+	 * Setter de l'expression
+	 * Normalise l'expression
+	 * @param exp
+	 */
 	public void SetExpression(String exp) {
 		exp = exp.trim();
 		
@@ -64,26 +69,50 @@ public class Charge {
 		this.exp = exp.trim();
 	}
 	
+	/**
+	 * Getter de l'expression
+	 * @return exp
+	 */
 	public String GetExpression() {
 		return this.exp;
 	}
 	
+	/**
+	 * Setter de la representation
+	 * @param rep
+	 */
 	public void SetRepresentation(String rep) {
 		this.representation = rep.trim();
 	}
 	
+	/**
+	 * Getter de la représentation
+	 * @return representation
+	 */
 	public String GetRepresentation() {
 		return this.representation;
 	}
 	
+	/**
+	 * Getter du nombre
+	 * @return nombre
+	 */
 	public int GetNombre() {
 		return this.nombre;
 	}
 	
+	/**
+	 * Setter du nombre
+	 * @param nb
+	 */
 	public void SetNombre(int nb) {
 		this.nombre = nb;
 	}
 	
+	/**
+	 * Getter des couleurs
+	 * @return couleurs
+	 */
 	public List<Couleur> GetCouleurs() {
 		return this.couleurs;
 	}

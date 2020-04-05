@@ -18,6 +18,10 @@ public class Couleur {
 		this.SetCouleur(exp);
 	}
 	
+	/**
+	 * Setter de la couleur en fonction de son expression
+	 * @param exp, expression de la couleur
+	 */
 	public void SetCouleur(String exp) {
 		// Normalisation de l'expression
 		String n_exp = exp.toLowerCase();
@@ -102,6 +106,10 @@ public class Couleur {
 		}
 	}
 
+	/**
+	 * Getter de l'objet Color associé
+	 * @return couleur
+	 */
 	public Color getCouleur() {
 		return this.couleur;
 	}
